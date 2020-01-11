@@ -1,0 +1,178 @@
+#!/usr/bin/python3
+
+from os import system
+import subprocess
+import sys
+
+
+batcmd = 'adb shell wm size'
+result = subprocess.check_output(batcmd, shell=True)
+sizeX = int(result.split(" ")[2].split("x")[0])
+sizeY = int(result.split(" ")[2].split("x")[1])
+# print("x:" + str(sizeX) + "-y:" + str(sizeY) + "-")
+
+def sleep(time):
+    command = "sleep " + str(time)
+    system(command)
+
+def tap(x, y):
+    command = "adb shell input tap "
+    command += str(x) + ' ' + str(y)
+
+def up(nTimes):
+    for i in range(nTimes):
+        system('adb shell input keyevent 19') # up once
+
+
+def insertText(text):
+    system('adb shell input text "{}"'.format(text))
+
+
+def down(nTimes):
+    up(1)
+    for i in range(nTimes):
+        system('adb shell input keyevent 20')
+
+
+def swipeDown(x1, y1, x2, y2, duration=500):
+    command = 'adb shell input swipe '
+    command += str(x1) + ' '
+    command += str(y1) + ' '
+    command += str(x2) + ' '
+    command += str(y2) + ' '
+    command += str(duration) + ' '
+    system(command, shell=true)
+
+
+def openMenu():
+    system('adb shell input keyevent 82')
+
+
+def enter():
+    system('adb shell input keyevent 23')
+
+
+def menuOption(option):
+    if option == 1:
+        openMenu()
+        up(1)
+        enter()
+        
+    else:
+        openMenu()
+        down(option - 1)
+        enter()
+
+
+def insertFilds():
+    x = sizeX/2
+    tap(x, 670)
+    sleep(2)
+    
+    
+
+
+
+if len(sys.argv) == 1:
+    print('''
+    Invalid option. List of options
+        - menu
+        - reload
+        - debug
+        - livereload
+        - hotreload
+        - inspector
+        - perfmonitor
+        - sampling
+        - dev
+    ''')
+
+elif sys.argv[1] == 'menu':
+    openMenu()
+
+elif sys.argv[1] == 'reload':
+    menuOption(1)
+
+elif sys.argv[1] == 'debug':
+    menuOption(2)
+
+elif sys.argv[1] == 'livereload':
+    menuOption(3)
+
+elif sys.argv[1] == 'hotreload':
+    menuOption(4)
+
+elif sys.argv[1] == 'inspector':
+    menuOption(5)
+
+elif sys.argv[1] == 'perfmonitor':
+    menuOption(6)
+
+elif sys.argv[1] == 'sampling':
+    menuOption(7)
+
+elif sys.argv[1] == 'dev':
+    menuOption(8)
+
+elif sys.argv[1] == 'auto':
+    insertFilds()
+
+elif sys.argv[1] == 'text':
+    insertText(sys.argv[2])
+
+elif sys.argv[1] == 'test':
+    print('testing...')
+else:
+    print('Opcao nao disponivel')
+
+'''
+    0  -->  "KEYCODE_UNKNOWN" 
+    1  -->  "KEYCODE_MENU" 
+    2  -->  "KEYCODE_SOFT_RIGHT" 
+    3  -->  "KEYCODE_HOME" 
+    4  -->  "KEYCODE_BACK" 
+    5  -->  "KEYCODE_CALL" 
+    6  -->  "KEYCODE_ENDCALL" 
+    7  -->  "KEYCODE_0" 
+    8  -->  "KEYCODE_1" 
+    9  -->  "KEYCODE_2" 
+    10 -->  "KEYCODE_3" 
+    11 -->  "KEYCODE_4" 
+    12 -->  "KEYCODE_5" 
+    13 -->  "KEYCODE_6" 
+    14 -->  "KEYCODE_7" 
+    15 -->  "KEYCODE_8" 
+    16 -->  "KEYCODE_9" 
+    17 -->  "KEYCODE_STAR" 
+    18 -->  "KEYCODE_POUND" 
+    19 -->  "KEYCODE_DPAD_UP" 
+    20 -->  "KEYCODE_DPAD_DOWN" 
+    21 -->  "KEYCODE_DPAD_LEFT" 
+    22 -->  "KEYCODE_DPAD_RIGHT" 
+    23 -->  "KEYCODE_DPAD_CENTER" 
+    24 -->  "KEYCODE_VOLUME_UP" 
+    25 -->  "KEYCODE_VOLUME_DOWN" 
+    26 -->  "KEYCODE_POWER" 
+    27 -->  "KEYCODE_CAMERA" 
+    28 -->  "KEYCODE_CLEAR" 
+    29 -->  "KEYCODE_A" 
+    30 -->  "KEYCODE_B" 
+    31 -->  "KEYCODE_C" 
+    32 -->  "KEYCODE_D" 
+    33 -->  "KEYCODE_E" 
+    34 -->  "KEYCODE_F" 
+    35 -->  "KEYCODE_G" 
+    36 -->  "KEYCODE_H"
+'''
+
+
+'''
+    Send command to especific device => adb -s [serial_number] [command]
+
+
+    adb install path_to_apk         => install apk
+    adb forward tcp:[port]          => Configura encaminhamento de portas arbitrarias (ex: adb forward tcp:6100 tcp:7100)
+    adb push [local] [remote]       => copia do pc pro dispositivo (ex: adb push foo.txt /sdcard/foo.txt)
+    adb pull [remote] [local]       => copia do dispositivo pro pc
+    
+'''
